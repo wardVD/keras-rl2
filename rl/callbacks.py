@@ -8,7 +8,7 @@ from tempfile import mkdtemp
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras import __version__ as KERAS_VERSION
-from tensorflow.python.keras.callbacks import Callback as KerasCallback, CallbackList as KerasCallbackList
+from tensorflow.python.keras.callbacks import Callback as KerasCallback, CallbackList as KerasCallbackList, TensorBoard as KerasTensorBoard
 from tensorflow.python.keras.utils.generic_utils import Progbar
 
 class Callback(KerasCallback):
@@ -381,3 +381,10 @@ class ModelIntervalCheckpoint(Callback):
         if self.verbose > 0:
             print('Step {}: saving model to {}'.format(self.total_steps, filepath))
         self.model.save_weights(filepath, overwrite=True)
+
+class TensorBoard(KerasTensorBoard):
+    def _set_env(self, env):
+        self.env = env
+
+    def set_model(self, agent):
+        self.model = agent.model
